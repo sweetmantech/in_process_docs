@@ -1466,8 +1466,8 @@
     },
     "/collections/default": {
       "get": {
-        "summary": "Create Process Collection",
-        "description": "Create the shared **Process** collection for the authenticated artist.",
+        "summary": "Get Default Collection",
+        "description": "Get the default collection for the authenticated artist. Returns the shared **Process** collection when no default is set.",
         "operationId": "createDefaultCollection",
         "security": [
           {
@@ -1479,7 +1479,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Process collection created, or the existing Process collection for this artist",
+            "description": "The default collection for this artist",
             "content": {
               "application/json": {
                 "schema": {
@@ -1502,6 +1502,116 @@
           },
           "401": {
             "description": "Unauthorized — missing or invalid authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Set Default Collection",
+        "description": "Set the default collection for the authenticated artist. Send `null` to reset it to the shared **Process** collection.\n\n**Note:** Only Collection admins can set a Collection as the default.",
+        "operationId": "setDefaultCollection",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "apiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetDefaultCollectionRequest"
+              },
+              "examples": {
+                "set": {
+                  "summary": "Set a collection as default",
+                  "value": {
+                    "collectionAddress": "0x06a701Ae65582B92Af48cDff45a8B20DcA3714cA"
+                  }
+                },
+                "reset": {
+                  "summary": "Reset to the Process collection",
+                  "value": {
+                    "collectionAddress": null
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The new default collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RpcCollection"
+                },
+                "example": {
+                  "id": "22222222-2222-2222-2222-222222222222",
+                  "address": "0x06a701Ae65582B92Af48cDff45a8B20DcA3714cA",
+                  "name": "My Collection",
+                  "chain_id": 8453,
+                  "created_at": "2025-06-07T20:41:35+00:00",
+                  "uri": "ar://FrDLosTVZP54g8xvLkGG0aWDGrKV46dDAz5umTJkiyA",
+                  "protocol": "in_process",
+                  "creator": "0x4b4324bcC6dB9380ABBbbD20B24A16C11FB5B38A",
+                  "admins": []
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request \u2014 missing body or invalid `collectionAddress`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized \u2014 missing or invalid authentication",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden \u2014 the artist is not an admin of the Collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Collection not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -5439,6 +5549,22 @@
           "chainId": {
             "type": "integer",
             "description": "Chain ID where the transaction was executed"
+          }
+        }
+      },
+      "SetDefaultCollectionRequest": {
+        "type": "object",
+        "required": [
+          "collectionAddress"
+        ],
+        "properties": {
+          "collectionAddress": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Collection address, or `null` to reset to the Process collection",
+            "example": "0x06a701Ae65582B92Af48cDff45a8B20DcA3714cA"
           }
         }
       },
