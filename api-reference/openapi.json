@@ -1935,6 +1935,16 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "future",
+            "in": "query",
+            "description": "If false, excludes moments released more than one year from now (default: true). Only applies to the main timeline; ignored when `artist` or `collection` is provided. Does not change `pagination.total_pages`.",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
           }
         ],
         "responses": {
