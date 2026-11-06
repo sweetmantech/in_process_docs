@@ -2870,24 +2870,35 @@
     "/artists/search": {
       "get": {
         "summary": "Search Artists",
-        "description": "Search for artists by username on the In\u2022Process protocol.",
+        "description": "Search for artists by username prefix, or look up a single artist by exact handle.",
         "operationId": "searchArtists",
         "security": [],
         "parameters": [
           {
             "name": "query",
             "in": "query",
-            "description": "The username prefix to search for. Matching is case-insensitive and uses prefix matching (e.g. `mat` matches `matt`, `Matilda`).",
-            "required": true,
+            "description": "The username prefix to search for. Matching is case-insensitive and uses prefix matching (e.g. `mat` matches `matt`, `Matilda`). Required unless `handle` is provided.",
+            "required": false,
             "schema": {
               "type": "string",
               "minLength": 1
             }
           },
           {
+            "name": "handle",
+            "in": "query",
+            "description": "Look up the artist with exactly this handle. The value is trimmed and lowercased before matching. Returns at most one artist, or an empty `artists` array when no artist has this handle. When provided, `query` and `limit` are ignored. Must be 3-30 characters of `a-z`, `0-9`, `.`, `_` or `-`, start and end with a letter or number, and not start with `0x`; otherwise returns `400`.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 30
+            }
+          },
+          {
             "name": "limit",
             "in": "query",
-            "description": "Maximum number of artists to return.",
+            "description": "Maximum number of artists to return. Ignored when `handle` is provided.",
             "required": false,
             "schema": {
               "type": "integer",
@@ -2905,19 +2916,51 @@
                 "schema": {
                   "$ref": "#/components/schemas/SearchArtistsResponse"
                 },
-                "example": {
-                  "artists": [
-                    {
-                      "address": "0x51027631B9DEF86e088C33368eC4E3A4BE0aD264",
-                      "username": "matt"
+                "examples": {
+                  "query": {
+                    "summary": "Search by username prefix",
+                    "value": {
+                      "artists": [
+                        {
+                          "username": "matt",
+                          "handle": "matt",
+                          "wallets": [
+                            {
+                              "address": "0x51027631b9def86e088c33368ec4e3a4be0ad264",
+                              "type": "privy",
+                              "eoa": null,
+                              "artist": "00000000-0000-0000-0000-000000000001"
+                            }
+                          ]
+                        }
+                      ]
                     }
-                  ]
+                  },
+                  "handle": {
+                    "summary": "Look up by handle",
+                    "value": {
+                      "artists": [
+                        {
+                          "username": "sofractures",
+                          "handle": "sofractures.eth",
+                          "wallets": [
+                            {
+                              "address": "0x3585ca22df80d70f6d1cc0867d8387c360181349",
+                              "type": "external",
+                              "eoa": null,
+                              "artist": "00000000-0000-0000-0000-000000000002"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request \u2014 invalid or missing query params",
+            "description": "Bad request \u2014 missing both `query` and `handle`, or invalid params",
             "content": {
               "application/json": {
                 "schema": {
@@ -7693,23 +7736,67 @@
         "properties": {
           "artists": {
             "type": "array",
-            "description": "Artists matching the search query, ordered by the database default.",
+            "description": "Artists matching the search. With `handle`, contains at most one artist.",
             "items": {
               "type": "object",
               "required": [
-                "address",
-                "username"
+                "username",
+                "handle",
+                "wallets"
               ],
               "properties": {
-                "address": {
-                  "type": "string",
-                  "description": "The artist's wallet address.",
-                  "pattern": "^0x[a-fA-F0-9]{40}$"
-                },
                 "username": {
                   "type": "string",
                   "nullable": true,
-                  "description": "The artist's username."
+                  "description": "The artist display name."
+                },
+                "handle": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "The artist handle used in profile URLs (`https://inprocess.world/{handle}`). `null` when not set."
+                },
+                "wallets": {
+                  "type": "array",
+                  "description": "Wallets linked to the artist.",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "address",
+                      "type",
+                      "eoa",
+                      "artist"
+                    ],
+                    "properties": {
+                      "address": {
+                        "type": "string",
+                        "description": "Wallet address (lowercase).",
+                        "pattern": "^0x[a-f0-9]{40}$"
+                      },
+                      "type": {
+                        "type": "string",
+                        "nullable": true,
+                        "enum": [
+                          "privy",
+                          "farcaster",
+                          "external",
+                          "payment",
+                          "operator",
+                          null
+                        ],
+                        "description": "Wallet type. `payment` and `operator` are smart accounts; the others (including `null`) are EOAs."
+                      },
+                      "eoa": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "For `operator` wallets, the EOA it is derived from. Otherwise `null`."
+                      },
+                      "artist": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "The artist id this wallet belongs to."
+                      }
+                    }
+                  }
                 }
               }
             }
