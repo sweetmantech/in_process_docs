@@ -2880,7 +2880,7 @@
     "/artists/search": {
       "get": {
         "summary": "Search Artists",
-        "description": "Search for artists by username prefix, or look up a single artist by exact handle.\n\n- With `query`: returns `{ artists: [...] }`, an array of matching artists.\n- With `handle`: returns `{ artist: {...} }`, a single artist object (not an array). Returns `404` when no artist has this handle.",
+        "description": "Search for artists by username prefix, or look up a single artist by exact handle.",
         "operationId": "searchArtists",
         "security": [],
         "parameters": [
@@ -2897,7 +2897,7 @@
           {
             "name": "handle",
             "in": "query",
-            "description": "Look up the artist with exactly this handle. The value is trimmed and lowercased before matching. Returns a single `artist` object instead of an `artists` array, or `404` when no artist has this handle. When provided, `query` and `limit` are ignored. Must be 3-30 characters of `a-z`, `0-9`, `.`, `_` or `-`, start and end with a letter or number, and not start with `0x`; otherwise returns `400`.",
+            "description": "Exact handle to look up (case-insensitive). Returns a single `artist` object, or `404` if not found. Overrides `query` and `limit`.",
             "required": false,
             "schema": {
               "type": "string",
@@ -2920,7 +2920,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response. `{ artists: [...] }` for `query` searches; `{ artist: {...} }` for `handle` lookups.",
+            "description": "Successful response",
             "content": {
               "application/json": {
                 "schema": {
@@ -2985,7 +2985,7 @@
             }
           },
           "404": {
-            "description": "No artist has the given `handle`. Only returned for `handle` lookups.",
+            "description": "No artist has the given `handle`.",
             "content": {
               "application/json": {
                 "schema": {
