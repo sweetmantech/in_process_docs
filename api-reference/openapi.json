@@ -2880,7 +2880,7 @@
     "/artists/search": {
       "get": {
         "summary": "Search Artists",
-        "description": "Search for artists by username prefix, or look up a single artist by exact handle.",
+        "description": "Search for artists by username prefix, or look up a single artist by exact handle.\n\n- With `query`: returns `{ artists: [...] }`, an array of matching artists.\n- With `handle`: returns `{ artist: {...} }`, a single artist object (not an array). Returns `404` when no artist has this handle.",
         "operationId": "searchArtists",
         "security": [],
         "parameters": [
@@ -2897,7 +2897,7 @@
           {
             "name": "handle",
             "in": "query",
-            "description": "Look up the artist with exactly this handle. The value is trimmed and lowercased before matching. Returns at most one artist, or an empty `artists` array when no artist has this handle. When provided, `query` and `limit` are ignored. Must be 3-30 characters of `a-z`, `0-9`, `.`, `_` or `-`, start and end with a letter or number, and not start with `0x`; otherwise returns `400`.",
+            "description": "Look up the artist with exactly this handle. The value is trimmed and lowercased before matching. Returns a single `artist` object instead of an `artists` array, or `404` when no artist has this handle. When provided, `query` and `limit` are ignored. Must be 3-30 characters of `a-z`, `0-9`, `.`, `_` or `-`, start and end with a letter or number, and not start with `0x`; otherwise returns `400`.",
             "required": false,
             "schema": {
               "type": "string",
@@ -2920,11 +2920,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response",
+            "description": "Successful response. `{ artists: [...] }` for `query` searches; `{ artist: {...} }` for `handle` lookups.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SearchArtistsResponse"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SearchArtistsResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ArtistByHandleResponse"
+                    }
+                  ]
                 },
                 "examples": {
                   "query": {
@@ -2947,22 +2954,20 @@
                     }
                   },
                   "handle": {
-                    "summary": "Look up by handle",
+                    "summary": "Look up by handle (single object)",
                     "value": {
-                      "artists": [
-                        {
-                          "username": "sofractures",
-                          "handle": "sofractures.eth",
-                          "wallets": [
-                            {
-                              "address": "0x3585ca22df80d70f6d1cc0867d8387c360181349",
-                              "type": "external",
-                              "eoa": null,
-                              "artist": "00000000-0000-0000-0000-000000000002"
-                            }
-                          ]
-                        }
-                      ]
+                      "artist": {
+                        "username": "sofractures",
+                        "handle": "sofractures.eth",
+                        "wallets": [
+                          {
+                            "address": "0x3585ca22df80d70f6d1cc0867d8387c360181349",
+                            "type": "external",
+                            "eoa": null,
+                            "artist": "00000000-0000-0000-0000-000000000002"
+                          }
+                        ]
+                      }
                     }
                   }
                 }
@@ -2975,6 +2980,19 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No artist has the given `handle`. Only returned for `handle` lookups.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Artist not found"
                 }
               }
             }
@@ -7746,67 +7764,82 @@
         "properties": {
           "artists": {
             "type": "array",
-            "description": "Artists matching the search. With `handle`, contains at most one artist.",
+            "description": "Artists matching the username prefix.",
+            "items": {
+              "$ref": "#/components/schemas/SearchedArtist"
+            }
+          }
+        }
+      },
+      "ArtistByHandleResponse": {
+        "type": "object",
+        "required": [
+          "artist"
+        ],
+        "properties": {
+          "artist": {
+            "$ref": "#/components/schemas/SearchedArtist",
+            "description": "The artist with the given handle."
+          }
+        }
+      },
+      "SearchedArtist": {
+        "type": "object",
+        "required": [
+          "username",
+          "handle",
+          "wallets"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "nullable": true,
+            "description": "The artist display name."
+          },
+          "handle": {
+            "type": "string",
+            "nullable": true,
+            "description": "The artist handle used in profile URLs (`https://inprocess.world/{handle}`). `null` when not set."
+          },
+          "wallets": {
+            "type": "array",
+            "description": "Wallets linked to the artist.",
             "items": {
               "type": "object",
               "required": [
-                "username",
-                "handle",
-                "wallets"
+                "address",
+                "type",
+                "eoa",
+                "artist"
               ],
               "properties": {
-                "username": {
+                "address": {
+                  "type": "string",
+                  "description": "Wallet address (lowercase).",
+                  "pattern": "^0x[a-f0-9]{40}$"
+                },
+                "type": {
                   "type": "string",
                   "nullable": true,
-                  "description": "The artist display name."
+                  "enum": [
+                    "privy",
+                    "farcaster",
+                    "external",
+                    "payment",
+                    "operator",
+                    null
+                  ],
+                  "description": "Wallet type. `payment` and `operator` are smart accounts; the others (including `null`) are EOAs."
                 },
-                "handle": {
+                "eoa": {
                   "type": "string",
                   "nullable": true,
-                  "description": "The artist handle used in profile URLs (`https://inprocess.world/{handle}`). `null` when not set."
+                  "description": "For `operator` wallets, the EOA it is derived from. Otherwise `null`."
                 },
-                "wallets": {
-                  "type": "array",
-                  "description": "Wallets linked to the artist.",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "address",
-                      "type",
-                      "eoa",
-                      "artist"
-                    ],
-                    "properties": {
-                      "address": {
-                        "type": "string",
-                        "description": "Wallet address (lowercase).",
-                        "pattern": "^0x[a-f0-9]{40}$"
-                      },
-                      "type": {
-                        "type": "string",
-                        "nullable": true,
-                        "enum": [
-                          "privy",
-                          "farcaster",
-                          "external",
-                          "payment",
-                          "operator",
-                          null
-                        ],
-                        "description": "Wallet type. `payment` and `operator` are smart accounts; the others (including `null`) are EOAs."
-                      },
-                      "eoa": {
-                        "type": "string",
-                        "nullable": true,
-                        "description": "For `operator` wallets, the EOA it is derived from. Otherwise `null`."
-                      },
-                      "artist": {
-                        "type": "string",
-                        "format": "uuid",
-                        "description": "The artist id this wallet belongs to."
-                      }
-                    }
-                  }
+                "artist": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "The artist id this wallet belongs to."
                 }
               }
             }
