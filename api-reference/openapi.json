@@ -3958,7 +3958,7 @@
                 "example": {
                   "address": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
                   "eth_balance": "0.5",
-                  "usdc_balance": "100.0"
+                  "usdc_balance": "100"
                 }
               }
             }
@@ -8196,7 +8196,6 @@
       "Error": {
         "type": "object",
         "required": [
-          "status",
           "message"
         ],
         "properties": {
