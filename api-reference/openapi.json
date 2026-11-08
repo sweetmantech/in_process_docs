@@ -3921,7 +3921,7 @@
     },
     "/smartwallet/balances": {
       "get": {
-        "summary": "Balances of social smart wallets",
+        "summary": "Get smart wallet balances",
         "description": "Get the ETH and USDC balances of an artist's smart wallet.",
         "operationId": "getSocialSmartWalletBalances",
         "security": [],
