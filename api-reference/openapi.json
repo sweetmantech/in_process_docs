@@ -660,7 +660,7 @@
     "/moment/collect": {
       "post": {
         "summary": "Collect a Moment",
-        "description": "Collect copies of a Moment as the authenticated artist.\n\n- **Who pays:** the artist's smart wallet. It must hold enough USDC or ETH for the Moment's price. Use [Get smart wallet balances](/api-reference/smartwallet/balances) to check it and find the address to fund.\n- **Who receives:** the copies are minted to the artist's primary wallet (the `artistAddress` returned by [`GET /oauth`](/api-reference/oauth/get)).\n- **Cost:** `amount` copies times the Moment's price per token.\n\nAuthenticate with an API key (`x-api-key`) or a Bearer token from [Login with OTP](/api-reference/oauth/login).",
+        "description": "Collect copies of a Moment. The artist's smart wallet pays in USDC or ETH. Copies go to the artist's primary wallet.",
         "operationId": "collectMoment",
         "security": [
           {
@@ -6366,12 +6366,11 @@
           },
           "amount": {
             "type": "number",
-            "description": "Number of copies to collect. This is a count of tokens, not a price or currency amount.",
-            "example": 1
+            "description": "Number of copies, not a price."
           },
           "comment": {
             "type": "string",
-            "description": "Required. Use an empty string for no comment. The comment is public and is passed into the onchain collect call."
+            "description": "Public and passed onchain. Use an empty string for no comment."
           }
         }
       },
