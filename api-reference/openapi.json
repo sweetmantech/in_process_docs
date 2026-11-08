@@ -6345,16 +6345,16 @@
         "type": "object",
         "required": [
           "moment",
-          "amount",
+          "quantity",
           "comment"
         ],
         "properties": {
           "moment": {
             "$ref": "#/components/schemas/MomentIdentifier"
           },
-          "amount": {
+          "quantity": {
             "type": "number",
-            "description": "Amount to be collected"
+            "description": "Number of copies to collect."
           },
           "comment": {
             "type": "string",
