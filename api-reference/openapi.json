@@ -660,11 +660,14 @@
     "/moment/collect": {
       "post": {
         "summary": "Collect a Moment",
-        "description": "Collect a Moment on the In\u2022Process protocol. This endpoint allows users to collect moments with an optional comment.",
+        "description": "Collect copies of a Moment as the authenticated artist.\n\n- **Who pays:** the artist's smart wallet. It must hold enough USDC or ETH for the Moment's price. Use [Get smart wallet balances](/api-reference/smartwallet/balances) to check it and find the address to fund.\n- **Who receives:** the copies are minted to the artist's primary wallet (the `artistAddress` returned by [`GET /oauth`](/api-reference/oauth/get)).\n- **Cost:** `amount` copies times the Moment's price per token.\n\nAuthenticate with an API key (`x-api-key`) or a Bearer token from [Login with OTP](/api-reference/oauth/login).",
         "operationId": "collectMoment",
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -673,6 +676,15 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CollectMomentRequest"
+              },
+              "example": {
+                "moment": {
+                  "collectionAddress": "0x1234567890abcdef1234567890abcdef12345678",
+                  "tokenId": "14",
+                  "chainId": 8453
+                },
+                "amount": 1,
+                "comment": ""
               }
             }
           }
@@ -6354,11 +6366,12 @@
           },
           "amount": {
             "type": "number",
-            "description": "Amount to be collected"
+            "description": "Number of copies to collect. This is a count of tokens, not a price or currency amount.",
+            "example": 1
           },
           "comment": {
             "type": "string",
-            "description": "Comment"
+            "description": "Required. Use an empty string for no comment. The comment is public and is passed into the onchain collect call."
           }
         }
       },
