@@ -3921,15 +3921,15 @@
     },
     "/smartwallet/balances": {
       "get": {
-        "summary": "Balances of social smart wallets",
-        "description": "Get balances of all social smart wallets associated with an artist address. Returns ETH and USDC balances for each social smart wallet, along with total balances across all wallets.",
+        "summary": "Get smart wallet balances",
+        "description": "Get the ETH and USDC balances of an artist's smart wallet.",
         "operationId": "getSocialSmartWalletBalances",
         "security": [],
         "parameters": [
           {
-            "name": "artist_address",
+            "name": "artistId",
             "in": "query",
-            "description": "The artist wallet address to get balances for",
+            "description": "Artist ID, returned as `profile.id` by `GET /oauth`.",
             "required": true,
             "schema": {
               "type": "string"
@@ -3956,16 +3956,9 @@
                   "$ref": "#/components/schemas/SocialSmartWalletBalancesResponse"
                 },
                 "example": {
-                  "balances": [
-                    {
-                      "social_wallet": "0x1234567890123456789012345678901234567890",
-                      "smart_wallet": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
-                      "eth_balance": "0.5",
-                      "usdc_balance": "100.0"
-                    }
-                  ],
-                  "total_eth_balance": "0.5",
-                  "total_usdc_balance": "100.0"
+                  "address": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
+                  "eth_balance": "0.5",
+                  "usdc_balance": "100"
                 }
               }
             }
@@ -7114,44 +7107,14 @@
       "SocialSmartWalletBalancesResponse": {
         "type": "object",
         "required": [
-          "balances",
-          "total_eth_balance",
-          "total_usdc_balance"
-        ],
-        "properties": {
-          "balances": {
-            "type": "array",
-            "description": "Array of balance information for each social smart wallet",
-            "items": {
-              "$ref": "#/components/schemas/SocialSmartWalletBalance"
-            }
-          },
-          "total_eth_balance": {
-            "type": "string",
-            "description": "Total ETH balance across all social smart wallets"
-          },
-          "total_usdc_balance": {
-            "type": "string",
-            "description": "Total USDC balance across all social smart wallets"
-          }
-        }
-      },
-      "SocialSmartWalletBalance": {
-        "type": "object",
-        "required": [
-          "social_wallet",
-          "smart_wallet",
+          "address",
           "eth_balance",
           "usdc_balance"
         ],
         "properties": {
-          "social_wallet": {
+          "address": {
             "type": "string",
-            "description": "Address of the social wallet"
-          },
-          "smart_wallet": {
-            "type": "string",
-            "description": "Address of the smart wallet associated with the social wallet"
+            "description": "The artist's smart wallet. Fund this address before collecting."
           },
           "eth_balance": {
             "type": "string",
@@ -8233,7 +8196,6 @@
       "Error": {
         "type": "object",
         "required": [
-          "status",
           "message"
         ],
         "properties": {
