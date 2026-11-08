@@ -660,14 +660,11 @@
     "/moment/collect": {
       "post": {
         "summary": "Collect a Moment",
-        "description": "Collect copies of a Moment. The artist's smart wallet pays in USDC or ETH. Copies go to the artist's primary wallet.",
+        "description": "Collect a Moment on the In\u2022Process protocol. This endpoint allows users to collect moments with an optional comment.",
         "operationId": "collectMoment",
         "security": [
           {
             "apiKeyAuth": []
-          },
-          {
-            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -676,15 +673,6 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CollectMomentRequest"
-              },
-              "example": {
-                "moment": {
-                  "collectionAddress": "0x1234567890abcdef1234567890abcdef12345678",
-                  "tokenId": "14",
-                  "chainId": 8453
-                },
-                "amount": 1,
-                "comment": ""
               }
             }
           }
@@ -6370,7 +6358,7 @@
           },
           "comment": {
             "type": "string",
-            "description": "Public and passed onchain. Use an empty string for no comment."
+            "description": "Comment"
           }
         }
       },
