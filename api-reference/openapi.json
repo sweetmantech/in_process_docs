@@ -665,6 +665,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
