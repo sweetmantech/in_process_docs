@@ -660,7 +660,7 @@
     "/moment/collect": {
       "post": {
         "summary": "Collect a Moment",
-        "description": "Collect a Moment on the In\u2022Process protocol. This endpoint allows users to collect moments with an optional comment.",
+        "description": "Collect copies of a Moment. The artist's smart wallet pays and must hold enough USDC or ETH. Copies go to the artist's primary wallet.",
         "operationId": "collectMoment",
         "security": [
           {
@@ -673,6 +673,15 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CollectMomentRequest"
+              },
+              "example": {
+                "moment": {
+                  "collectionAddress": "0x1234567890abcdef1234567890abcdef12345678",
+                  "tokenId": "1",
+                  "chainId": 8453
+                },
+                "quantity": 1,
+                "comment": ""
               }
             }
           }
@@ -6345,7 +6354,6 @@
         "type": "object",
         "required": [
           "moment",
-          "quantity",
           "comment"
         ],
         "properties": {
@@ -6353,8 +6361,10 @@
             "$ref": "#/components/schemas/MomentIdentifier"
           },
           "quantity": {
-            "type": "number",
-            "description": "Number of copies to collect."
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Number of copies to collect, not a price or currency amount."
           },
           "comment": {
             "type": "string",
