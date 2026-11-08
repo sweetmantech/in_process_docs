@@ -6353,8 +6353,7 @@
       "CollectMomentRequest": {
         "type": "object",
         "required": [
-          "moment",
-          "comment"
+          "moment"
         ],
         "properties": {
           "moment": {
@@ -6368,7 +6367,8 @@
           },
           "comment": {
             "type": "string",
-            "description": "Comment"
+            "default": "In Process!!!",
+            "description": "Public and passed into the onchain collect call. An empty string is kept as is."
           }
         }
       },
