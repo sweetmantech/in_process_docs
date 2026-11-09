@@ -4544,11 +4544,14 @@
     "/oauth": {
       "get": {
         "summary": "Get Authenticated Account",
-        "description": "Retrieve the authenticated artist's wallet address and profile.\n\n**Overview:**\n\nThis endpoint verifies the Bearer token from the [Login with OTP](/api-reference/oauth/login) endpoint and returns the associated artist address along with their profile information.\n\n1. Include the JWT token obtained from the login flow as a Bearer token in the `Authorization` header.\n2. On success, the artist's wallet address and profile are returned.",
+        "description": "Get the authenticated artist's primary wallet address and profile.",
         "operationId": "getAuthenticatedAccount",
         "security": [
           {
             "bearerAuth": []
+          },
+          {
+            "apiKeyAuth": []
           }
         ],
         "responses": {
@@ -4569,44 +4572,62 @@
                       "example": "0x1234567890abcdef1234567890abcdef12345678"
                     },
                     "profile": {
-                      "type": "object",
-                      "description": "The artist's profile information",
-                      "required": [
-                        "username",
-                        "bio",
-                        "farcaster_username",
-                        "instagram_username",
-                        "twitter_username",
-                        "telegram_username"
+                      "type": [
+                        "object",
+                        "null"
                       ],
+                      "description": "The artist's profile, or null if it could not be loaded.",
                       "properties": {
-                        "username": {
+                        "id": {
                           "type": "string",
-                          "description": "Artist's username. Falls back to ENS name if not set.",
+                          "description": "Artist ID",
+                          "example": "123e4567-e89b-12d3-a456-426614174000"
+                        },
+                        "username": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Artist's username",
                           "example": "sweetman"
                         },
+                        "handle": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Artist's handle",
+                          "example": "sweetman_eth"
+                        },
                         "bio": {
-                          "type": "string",
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "description": "Artist's biography",
                           "example": "the dev for onchain music."
                         },
-                        "farcaster_username": {
-                          "type": "string",
-                          "description": "Artist's Farcaster username",
-                          "example": "sweetman.eth"
-                        },
-                        "instagram_username": {
-                          "type": "string",
+                        "instagram": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "description": "Artist's Instagram username",
                           "example": "sweetman.eth"
                         },
-                        "twitter_username": {
-                          "type": "string",
-                          "description": "Artist's Twitter/X username",
+                        "x": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Artist's X username",
                           "example": "sweetman_eth"
                         },
-                        "telegram_username": {
-                          "type": "string",
+                        "telegram": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
                           "description": "Artist's Telegram username",
                           "example": "sweetman_eth"
                         },
@@ -4621,6 +4642,46 @@
                             "verified": {
                               "type": "boolean",
                               "example": true
+                            },
+                            "artist_id": {
+                              "type": "string",
+                              "example": "123e4567-e89b-12d3-a456-426614174000"
+                            },
+                            "artist": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "example": "123e4567-e89b-12d3-a456-426614174000"
+                                },
+                                "username": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ],
+                                  "description": "Artist's username",
+                                  "example": "sweetman"
+                                },
+                                "wallets": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "address": {
+                                        "type": "string",
+                                        "example": "0x1234567890abcdef1234567890abcdef12345678"
+                                      },
+                                      "type": {
+                                        "type": [
+                                          "string",
+                                          "null"
+                                        ],
+                                        "example": "external"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
                             }
                           }
                         }
@@ -4631,17 +4692,27 @@
                 "example": {
                   "artistAddress": "0x1234567890abcdef1234567890abcdef12345678",
                   "profile": {
+                    "id": "123e4567-e89b-12d3-a456-426614174000",
                     "username": "sweetman",
+                    "handle": "sweetman_eth",
                     "bio": "the dev for onchain music.",
-                    "farcaster_username": "sweetman.eth",
-                    "instagram_username": "sweetman.eth",
-                    "twitter_username": "sweetman_eth",
-                    "telegram_username": "sweetman_eth",
-                    "phone": {
-                      "phone_number": "+11234567890",
-                      "verified": true
-                    }
+                    "instagram": "sweetman.eth",
+                    "x": "sweetman_eth",
+                    "telegram": "sweetman_eth"
                   }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or expired credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Forbidden"
                 }
               }
             }
