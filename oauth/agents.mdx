@@ -1,0 +1,75 @@
+---
+title: Agents
+description: "Act for an artist with a short-lived token from a 6-digit email code."
+---
+
+An agent can act for an artist without a long-lived API key. The artist reads the agent a 6-digit code from their email, and the agent exchanges it for a token that expires after 1 hour.
+
+## Rules
+
+- Ask the artist for the email they sign in with, then ask them to read you the code. Never ask for inbox access or a long-lived API key.
+- Keep the token out of chat messages, logs and files.
+
+<Warning>
+  Use the exact email the artist signs in with. Login signs up new users, so a code from any other email the artist owns creates a new, empty account.
+</Warning>
+
+## Log in
+
+**1. Send the code**
+
+```bash
+curl -X POST https://api.inprocess.world/api/oauth/code \
+  -H "Content-Type: application/json" \
+  -d '{"email": "artist@example.com"}'
+```
+
+**2. Log in with the code**
+
+```bash
+curl -X POST https://api.inprocess.world/api/oauth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "artist@example.com", "code": "123456"}'
+```
+
+```json
+{
+  "token": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "social_wallet": "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b"
+}
+```
+
+The token lasts 1 hour and can't be refreshed. After that, requests are rejected; send a new code.
+
+**3. Confirm the artist**
+
+```bash
+curl https://api.inprocess.world/api/oauth \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+Check that `profile` is the expected artist before spending.
+
+## Collect a Moment
+
+Collecting spends USDC or ETH from the artist's smart wallet. See [Get smart wallet balances](/api-reference/smartwallet/balances).
+
+```bash
+curl -X POST https://api.inprocess.world/api/moment/collect \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "moment": {
+      "collectionAddress": "0x1234567890abcdef1234567890abcdef12345678",
+      "tokenId": "1",
+      "chainId": 8453
+    },
+    "quantity": 1
+  }'
+```
+
+See [Collect a Moment](/api-reference/moment/collect) for all fields.
+
+## Other endpoints
+
+The token works on any endpoint that accepts a Bearer token. To add sign-in to your own app, see [Sign in with In•Process](/oauth/login-with-otp).
