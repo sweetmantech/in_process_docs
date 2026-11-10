@@ -45,7 +45,8 @@
           {
             "group": "OAuth",
             "pages": [
-              "oauth/login-with-otp"
+              "oauth/login-with-otp",
+              "oauth/agents"
             ]
           },
           {
