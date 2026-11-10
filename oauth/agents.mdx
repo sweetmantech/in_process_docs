@@ -52,23 +52,7 @@ Check that `profile` is the expected artist before spending.
 
 ## Collect a Moment
 
-Collecting spends USDC or ETH from the artist's smart wallet. See [Get smart wallet balances](/api-reference/smartwallet/balances).
-
-```bash
-curl -X POST https://api.inprocess.world/api/moment/collect \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "moment": {
-      "collectionAddress": "0x1234567890abcdef1234567890abcdef12345678",
-      "tokenId": "1",
-      "chainId": 8453
-    },
-    "quantity": 1
-  }'
-```
-
-See [Collect a Moment](/api-reference/moment/collect) for all fields.
+Call [`POST /moment/collect`](/api-reference/moment/collect) with the token. It spends from the artist's smart wallet.
 
 ## Other endpoints
 
