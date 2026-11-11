@@ -26,6 +26,13 @@
             ]
           },
           {
+            "group": "Concepts",
+            "pages": [
+              "concepts/moments-and-collections",
+              "concepts/wallets"
+            ]
+          },
+          {
             "group": "Guides",
             "pages": [
               "guides/upload-to-arweave",

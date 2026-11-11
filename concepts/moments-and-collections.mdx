@@ -1,0 +1,36 @@
+---
+title: "Moments & collections"
+description: "How moments, collections, metadata and sales fit together."
+---
+
+A **collection** is an ERC-1155 contract on Base. A **moment** is one token in it. People collect copies of a moment.
+
+## Find a moment
+
+A moment is identified by its collection address, token ID and chain ID. Every create response returns all three:
+
+```json
+{
+  "contractAddress": "0x...",
+  "tokenId": "1",
+  "chainId": 8453
+}
+```
+
+Pass them to [Get a moment](/api-reference/moment/get) and the other moment endpoints.
+
+## Metadata
+
+Each moment points to a metadata JSON on Arweave (`tokenMetadataURI`). It holds the name, description, cover `image` and the `content` file. See [Quickstart](/quickstart) for the format.
+
+## Collections
+
+The artist who creates a collection is its admin and can create moments in it. Admins can be [added](/api-reference/moment/add-permission) or [removed](/api-reference/moment/remove-permission).
+
+Each artist also has a **default collection**, used when they post from the app or Telegram. Until they [set one](/api-reference/collections/set-default), it is their own collection named "Process", created the first time it is needed.
+
+## Sales
+
+Each moment has a [sale config](/api-reference/objects/sales-config): price, currency (ETH or USDC) and sale window. A price of `0` makes it free to collect. Change it later with [Set sale](/api-reference/sale).
+
+Revenue goes to the moment's [splits](/api-reference/objects/splits) if it has them. See [Wallets](/concepts/wallets) for who pays and who receives.
