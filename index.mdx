@@ -1,124 +1,41 @@
 ---
-title: "API Documentation"
+title: "Overview"
+description: "What In•Process is, where to start, and which page covers each task."
 ---
 
-# Welcome to In•Process
+In•Process is a platform where artists publish work in progress as onchain moments and others collect them. This API creates moments and collections, sells and collects them, and reads timelines and artist data.
 
-Use the In•Process API to build applications that interact with the protocol. Create moments, manage collections, browse timelines, and integrate with the decentralized creative platform.
+## Find your task
 
-## What is In•Process?
+| Task | Page |
+|---|---|
+| Act for an artist as an agent | [Agents](/agents) |
+| Create a moment | [Create a moment](/api-reference/moment/create) |
+| Upload media for a moment | [Upload file with In•Process](/guides/upload-file-in-process) |
+| Create a collection | [Create a collection](/api-reference/collections/create) |
+| Set a price or sale window | [Set sale](/api-reference/sale), [SalesConfig](/api-reference/objects/sales-config) |
+| Split revenue | [Splits](/api-reference/objects/splits) |
+| Collect a moment | [Collect a moment](/api-reference/moment/collect) |
+| Browse moments | [Timeline](/api-reference/timeline/index) |
+| Add sign-in to your app | [Sign in with In•Process](/guides/sign-in-with-in-process) |
+| Call the contracts directly | [Deployments](/protocol/deployments) |
 
-In•Process is a Web3-native platform for documenting and monetizing the creative journey—not just the final product. Artists, builders, and creatives can upload their work-in-progress (writing, music, visuals, links, embeds, or video) and mint it onchain to a collective timeline.
+## Base URL
 
-This documentation will help you integrate with the In•Process API to build applications that interact with the protocol.
+```bash
+https://api.inprocess.world/api
+```
 
-## Get Started
+## Authentication
 
-<CardGroup cols={2}>
-  <Card
-    title="API Reference"
-    icon="code"
-    href="/api-reference/introduction"
-  >
-    Explore all available endpoints and integrations. Learn how to create API keys and make your first request.
-  </Card>
-</CardGroup>
+Read endpoints like the timeline and collections are public. Endpoints that act for an artist take one of:
 
-## Core Features
+| Credential | Header | Get it from |
+|---|---|---|
+| API key | `x-api-key: art_sk_...` | [API keys](https://inprocess.world/manage/api-keys) in the app |
+| Access token (1 hour) | `Authorization: Bearer <token>` | A 6-digit email code ([Agents](/agents)) or "Copy access token" in the app |
 
-<CardGroup cols={2}>
-  <Card
-    title="Collections"
-    icon="folder"
-    href="/api-reference/collections/browse"
-  >
-    Browse, create, and manage NFT collections onchain. Filter by artist or explore the collective collections.
-  </Card>
-  <Card
-    title="Moments"
-    icon="sparkles"
-    href="/api-reference/moment/create"
-  >
-    Create, collect, and manage moments. Airdrop to recipients, manage permissions, update metadata, and retrieve comments.
-  </Card>
-  <Card
-    title="Artists"
-    icon="user"
-    href="/api-reference/artists/api-keys/create"
-  >
-    Create API keys, manage wallet connections, and connect phone numbers for SMS-based features.
-  </Card>
-  <Card
-    title="Airdrops"
-    icon="gift"
-    href="/api-reference/moment/airdrop"
-  >
-    Airdrop a moment to multiple recipients.
-  </Card>
-  <Card
-    title="Payments"
-    icon="wallet"
-    href="/api-reference/splits/create"
-  >
-    Create split contracts and distribute their funds to recipients.
-  </Card>
-  <Card
-    title="Smart Wallet"
-    icon="key"
-    href="/api-reference/smartwallet/get"
-  >
-    Get smart wallet addresses for artists to enable seamless onchain interactions.
-  </Card>
-  <Card
-    title="Timeline"
-    icon="clock"
-    href="/api-reference/timeline/index"
-  >
-    Browse moments from artist timelines or the collective timeline. Filter by artist, collection, or explore all moments.
-  </Card>
-  <Card
-    title="Notifications"
-    icon="bell"
-    href="/api-reference/notifications/index"
-  >
-    Browse notification records for protocol events. Filter by artist and viewed status.
-  </Card>
-</CardGroup>
+## Help
 
-## Developer Tools
-
-<CardGroup cols={2}>
-  <Card
-    title="Coinbase SDK"
-    icon="cube"
-    href="/guides/create-collection-coinbase-sdk"
-  >
-    Use the Coinbase SDK to create collections and interact with the protocol.
-  </Card>
-  <Card
-    title="Protocol"
-    icon="globe"
-    href="/protocol/deployments"
-  >
-    Learn about protocol deployments, setup actions, and smart contract interactions.
-  </Card>
-</CardGroup>
-
-## Need Help?
-
-<CardGroup cols={2}>
-  <Card
-    title="FAQ"
-    icon="question"
-    href="https://inprocess.world/faq"
-  >
-    Find answers to frequently asked questions about In•Process.
-  </Card>
-  <Card
-    title="Contact Support"
-    icon="envelope"
-    href="mailto:sweetmantech@gmail.com"
-  >
-    Reach out to our team for assistance with the In•Process API.
-  </Card>
-</CardGroup>
+- [FAQ](https://inprocess.world/faq)
+- [Support](mailto:sweetmantech@gmail.com)
