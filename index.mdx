@@ -23,12 +23,7 @@ https://api.inprocess.world/api
 
 ## Authentication
 
-Read endpoints like the timeline and collections are public. Endpoints that act for an artist take one of:
-
-| Credential | Header | Get it from |
-|---|---|---|
-| API key | `x-api-key: art_sk_...` | [API keys](https://inprocess.world/manage/api-keys) in the app |
-| Access token (1 hour) | `Authorization: Bearer <token>` | A 6-digit email code ([Agents](/agents)) or "Copy access token" in the app |
+Endpoints that act for an artist need an API key (`x-api-key`) or a 1-hour access token (`Authorization: Bearer`). See [Authentication](/authentication).
 
 ## Help
 

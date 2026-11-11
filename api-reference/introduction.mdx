@@ -25,34 +25,4 @@ https://api.inprocess.world/api
 
 ## Authentication
 
-Most API endpoints are **public** and do not require authentication. You can browse timelines and collections without providing any authorization headers.
-
-Currently available public endpoints:
-- `GET /timeline` - Browse moments from timelines
-- `GET /collections` - Browse collections
-
-Some endpoints require authentication using an API key passed in the `x-api-key` header. These endpoints are used for creating, updating, and managing moments and collections.
-
-### Getting Your API Key
-
-1. Navigate to the [In•Process API Keys Management Page](https://inprocess.world/manage/api-keys)
-2. Sign in with your account
-3. Create a new API key and copy it immediately (it's only shown once)
-
-### Using Your API Key
-
-Include your API key in the `x-api-key` header for authenticated requests:
-
-```bash
-curl -X POST "https://api.inprocess.world/api/moment/collect" \
-  -H "Content-Type: application/json" \
-  -H "x-api-key: art_sk_YOUR_API_KEY_HERE"
-```
-
-<Warning>
-Keep your API key secure. Do not share it publicly or commit it to version control.
-</Warning>
-
-<Note>
-  You can also create API keys programmatically using the [Create API Key endpoint](/api-reference/artists/api-keys/create).
-</Note>
+Endpoints that act for an artist need an API key or a 1-hour access token. See [Authentication](/authentication).
