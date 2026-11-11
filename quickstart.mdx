@@ -1,0 +1,112 @@
+---
+title: "Quickstart"
+description: "Upload a file, upload its metadata, and create a moment in an artist's collection."
+---
+
+Set your artist wallet address and [API key](https://inprocess.world/manage/api-keys):
+
+```bash
+export ADDRESS=0xYOUR_WALLET_ADDRESS
+export API_KEY=art_sk_YOUR_API_KEY
+```
+
+## 1. Find your collection
+
+```bash
+curl "https://api.inprocess.world/api/collections?artist=$ADDRESS"
+```
+
+Copy a collection `address` from the response.
+
+```bash
+export COLLECTION=0xYOUR_COLLECTION_ADDRESS
+```
+
+No collection yet? Use `"contract": { "name": "...", "uri": "ar://..." }` in step 4 to create one in the same request. See [Create a moment](/api-reference/moment/create).
+
+## 2. Upload your file
+
+Send a public URL. The server fetches the file and stores it on Arweave.
+
+```bash
+curl -X POST https://api.inprocess.world/api/upload \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $API_KEY" \
+  -d '{"url": "https://example.com/artwork.png"}'
+```
+
+```json
+{ "uri": "ar://FILE_ID" }
+```
+
+Files under 5 MB are free for 11 uploads a month. See [Upload file with In•Process](/guides/upload-file-in-process) for paid uploads.
+
+## 3. Upload the metadata
+
+Write a metadata JSON that points to the file:
+
+```json
+{
+  "name": "My first moment",
+  "description": "Work in progress.",
+  "image": "ar://FILE_ID",
+  "content": {
+    "mime": "image/png",
+    "uri": "ar://FILE_ID"
+  }
+}
+```
+
+For audio or video, also set `"animation_url": "ar://FILE_ID"` and use a cover image for `image`.
+
+Host this JSON at a public URL and upload it the same way as step 2, or upload it from your app with [`uploadJson`](/guides/upload-to-arweave#upload-json-metadata). Keep the returned URI.
+
+```bash
+export METADATA_URI=ar://METADATA_ID
+```
+
+## 4. Create the moment
+
+```bash
+curl -X POST https://api.inprocess.world/api/moment/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contract": { "address": "'"$COLLECTION"'" },
+    "token": {
+      "tokenMetadataURI": "'"$METADATA_URI"'",
+      "createReferral": "'"$ADDRESS"'",
+      "salesConfig": {
+        "type": "fixedPrice",
+        "pricePerToken": "0",
+        "saleStart": "0",
+        "saleEnd": "18446744073709551615"
+      },
+      "mintToCreatorCount": 1
+    },
+    "account": "'"$ADDRESS"'"
+  }'
+```
+
+```json
+{
+  "contractAddress": "0x...",
+  "tokenId": "1",
+  "hash": "0x...",
+  "chainId": 8453
+}
+```
+
+The moment is free to collect and has no end date. To set a price, see [SalesConfig](/api-reference/objects/sales-config). It then appears on your timeline:
+
+```bash
+curl "https://api.inprocess.world/api/timeline?artist=$ADDRESS"
+```
+
+<Tip>
+  Text only? [Create a writing moment](/api-reference/moment/writing) uploads the text for you and skips steps 2 and 3.
+</Tip>
+
+## Next steps
+
+- [Collect a moment](/api-reference/moment/collect) with an API key or access token.
+- [Agents](/agents): act for an artist with a 6-digit email code.
