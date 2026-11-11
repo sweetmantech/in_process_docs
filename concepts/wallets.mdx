@@ -1,0 +1,23 @@
+---
+title: "Wallets"
+description: "An artist's primary wallet and smart wallet, and who pays and receives on a collect."
+---
+
+Two of an artist's wallets matter when you use the API.
+
+| Wallet | What it is | Used for |
+|---|---|---|
+| Primary wallet | The artist's own wallet: an external wallet, or the embedded wallet from email sign-in | The artist's identity. `account` in requests, `artistAddress` from [`GET /oauth`](/api-reference/oauth/get). Receives collected copies. |
+| Smart wallet | A smart account In•Process runs for the artist | Holds USDC and ETH. Pays for collects and paid uploads. [Withdraw](/api-reference/smartwallet/withdraw) from here. |
+
+If the artist has both an external and an embedded wallet, the external one is primary.
+
+## Who pays and who receives
+
+| Action | Pays | Receives |
+|---|---|---|
+| [Collect a moment](/api-reference/moment/collect) | Collector's smart wallet | Copies: the collector's primary wallet. Payment: the moment's [split](/api-reference/objects/splits) contract, else its `payoutRecipient`, else the creator's `account`. |
+| [Paid upload](/guides/upload-file-in-process) | Artist's smart wallet | |
+| Gas for API transactions | In•Process | |
+
+To fund collects, send USDC or ETH on Base to the smart wallet address from [`GET /smartwallet`](/api-reference/smartwallet/get). Check it with [balances](/api-reference/smartwallet/balances).
