@@ -17,42 +17,25 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get started",
             "pages": [
-              "index"
+              "index",
+              "agents"
             ]
           },
           {
-            "group": "Configuration",
+            "group": "Guides",
             "pages": [
-              "configuration/sales-config",
-              "configuration/splits"
-            ]
-          },
-          {
-            "group": "Arweave",
-            "pages": [
-              "arweave/upload-to-arweave",
-              "arweave/upload-file-in-process"
-            ]
-          },
-          {
-            "group": "Coinbase SDK",
-            "pages": [
-              "coinbase-sdk/create-collection"
-            ]
-          },
-          {
-            "group": "OAuth",
-            "pages": [
-              "oauth/login-with-otp",
-              "oauth/agents"
+              "guides/upload-to-arweave",
+              "guides/upload-file-in-process",
+              "guides/create-collection-coinbase-sdk",
+              "guides/sign-in-with-in-process"
             ]
           },
           {
             "group": "Protocol",
             "pages": [
-              "protocol/protocol-deployments",
+              "protocol/deployments",
               "protocol/setup-actions"
             ]
           }
@@ -67,7 +50,13 @@
               "api-reference/introduction"
             ]
           },
-          
+          {
+            "group": "Objects",
+            "pages": [
+              "api-reference/objects/sales-config",
+              "api-reference/objects/splits"
+            ]
+          },
           {
             "group": "Moments",
             "pages": [
@@ -231,6 +220,72 @@
       ]
     }
   },
+  "redirects": [
+    {
+      "source": "/oauth/agents",
+      "destination": "/agents"
+    },
+    {
+      "source": "/oauth/agents.md",
+      "destination": "/agents.md"
+    },
+    {
+      "source": "/arweave/upload-to-arweave",
+      "destination": "/guides/upload-to-arweave"
+    },
+    {
+      "source": "/arweave/upload-to-arweave.md",
+      "destination": "/guides/upload-to-arweave.md"
+    },
+    {
+      "source": "/arweave/upload-file-in-process",
+      "destination": "/guides/upload-file-in-process"
+    },
+    {
+      "source": "/arweave/upload-file-in-process.md",
+      "destination": "/guides/upload-file-in-process.md"
+    },
+    {
+      "source": "/coinbase-sdk/create-collection",
+      "destination": "/guides/create-collection-coinbase-sdk"
+    },
+    {
+      "source": "/coinbase-sdk/create-collection.md",
+      "destination": "/guides/create-collection-coinbase-sdk.md"
+    },
+    {
+      "source": "/oauth/login-with-otp",
+      "destination": "/guides/sign-in-with-in-process"
+    },
+    {
+      "source": "/oauth/login-with-otp.md",
+      "destination": "/guides/sign-in-with-in-process.md"
+    },
+    {
+      "source": "/protocol/protocol-deployments",
+      "destination": "/protocol/deployments"
+    },
+    {
+      "source": "/protocol/protocol-deployments.md",
+      "destination": "/protocol/deployments.md"
+    },
+    {
+      "source": "/configuration/sales-config",
+      "destination": "/api-reference/objects/sales-config"
+    },
+    {
+      "source": "/configuration/sales-config.md",
+      "destination": "/api-reference/objects/sales-config.md"
+    },
+    {
+      "source": "/configuration/splits",
+      "destination": "/api-reference/objects/splits"
+    },
+    {
+      "source": "/configuration/splits.md",
+      "destination": "/api-reference/objects/splits.md"
+    }
+  ],
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
@@ -250,15 +305,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {
