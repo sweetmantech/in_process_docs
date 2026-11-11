@@ -1,0 +1,44 @@
+---
+title: "Authentication"
+description: "Act for an artist with an API key or a 1-hour access token."
+---
+
+Reads and moment creation are public. Endpoints that act for an artist need a credential; each endpoint page shows which.
+
+| Credential | Header | Lasts |
+|---|---|---|
+| API key | `x-api-key: art_sk_...` | Until deleted |
+| Access token | `Authorization: Bearer <token>` | 1 hour |
+
+Both act as the same artist. If you send both, the access token is used.
+
+## API key
+
+Create one on [API keys](https://inprocess.world/manage/api-keys) in the app and copy it right away. It is shown once.
+
+```bash
+curl https://api.inprocess.world/api/oauth \
+  -H "x-api-key: art_sk_YOUR_API_KEY"
+```
+
+## Access token
+
+Get one in either way:
+
+- **Email code:** the artist reads you a 6-digit code from their email. See [Agents](/agents).
+- **App:** the artist clicks "Copy access token" on [API keys](https://inprocess.world/manage/api-keys).
+
+```bash
+curl https://api.inprocess.world/api/oauth \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+The token can't be refreshed. When it expires, get a new one.
+
+<Warning>
+  Both credentials can spend from the artist's smart wallet. Keep them out of chat messages, logs and version control.
+</Warning>
+
+## Errors
+
+A missing, invalid or expired credential returns `401` or `403` with a `message`.
