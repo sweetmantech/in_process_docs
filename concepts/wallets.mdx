@@ -17,7 +17,7 @@ If the artist has both an external and an embedded wallet, the external one is p
 | Action | Pays | Receives |
 |---|---|---|
 | [Collect a moment](/api-reference/moment/collect) | Collector's smart wallet | Copies: the collector's primary wallet. Payment: the moment's [split](/api-reference/objects/splits) contract, else its `payoutRecipient`, else the creator's `account`. |
-| [Paid upload](/guides/upload-file-in-process) | Artist's smart wallet | |
+| [Paid upload](/guides/upload-files#cost) | Artist's smart wallet | |
 | Gas for API transactions | In•Process | |
 
 To fund collects, send USDC or ETH on Base to the smart wallet address from [`GET /smartwallet`](/api-reference/smartwallet/get). Check it with [balances](/api-reference/smartwallet/balances).

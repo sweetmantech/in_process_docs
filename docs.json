@@ -35,8 +35,7 @@
           {
             "group": "Guides",
             "pages": [
-              "guides/upload-to-arweave",
-              "guides/upload-file-in-process",
+              "guides/upload-files",
               "guides/create-collection-coinbase-sdk",
               "guides/sign-in-with-in-process"
             ]
@@ -240,19 +239,19 @@
     },
     {
       "source": "/arweave/upload-to-arweave",
-      "destination": "/guides/upload-to-arweave"
+      "destination": "/guides/upload-files"
     },
     {
       "source": "/arweave/upload-to-arweave.md",
-      "destination": "/guides/upload-to-arweave.md"
+      "destination": "/guides/upload-files.md"
     },
     {
       "source": "/arweave/upload-file-in-process",
-      "destination": "/guides/upload-file-in-process"
+      "destination": "/guides/upload-files"
     },
     {
       "source": "/arweave/upload-file-in-process.md",
-      "destination": "/guides/upload-file-in-process.md"
+      "destination": "/guides/upload-files.md"
     },
     {
       "source": "/coinbase-sdk/create-collection",
@@ -293,6 +292,22 @@
     {
       "source": "/configuration/splits.md",
       "destination": "/api-reference/objects/splits.md"
+    },
+    {
+      "source": "/guides/upload-to-arweave",
+      "destination": "/guides/upload-files"
+    },
+    {
+      "source": "/guides/upload-to-arweave.md",
+      "destination": "/guides/upload-files.md"
+    },
+    {
+      "source": "/guides/upload-file-in-process",
+      "destination": "/guides/upload-files"
+    },
+    {
+      "source": "/guides/upload-file-in-process.md",
+      "destination": "/guides/upload-files.md"
     }
   ],
   "logo": {

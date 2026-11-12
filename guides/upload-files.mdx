@@ -1,0 +1,218 @@
+---
+title: "Upload files"
+description: "Store a file or metadata JSON on Arweave and get an ar:// URI to use in a moment or collection."
+---
+
+There are two ways to upload:
+
+| Way | Use when | Who pays |
+|---|---|---|
+| [Through the API](#through-the-api) | You act for an artist | Free tier, then the artist's smart wallet |
+| [From your app with Turbo](#from-your-app-with-turbo) | You have your own Arweave wallet and Turbo credits | You |
+
+## Through the API
+
+Send a public URL to [`POST /upload`](/api-reference/arweave/upload). The server fetches the file, stores it on Arweave and returns its URI. It needs an [API key or access token](/authentication).
+
+```bash
+curl -X POST https://api.inprocess.world/api/upload \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $API_KEY" \
+  -d '{"url": "https://example.com/artwork.png"}'
+```
+
+```json
+{ "uri": "ar://FILE_ID" }
+```
+
+### Cost
+
+| Tier | When |
+|---|---|
+| Free | Files under 5 MB, up to 11 uploads a month per artist |
+| Paid | Files of 5 MB or more, or after the 11 free uploads |
+
+Paid uploads take USDC from the artist's [smart wallet](/concepts/wallets). If it doesn't hold enough, the API returns `402`:
+
+```json
+{
+  "message": "Insufficient USDC balance in smart wallet 0x...",
+  "required": "120000",
+  "available": "0",
+  "smart_wallet": "0x..."
+}
+```
+
+`required` and `available` are in USDC with 6 decimals. Send USDC on Base to `smart_wallet` and retry.
+
+### Upload JSON metadata
+
+`POST /upload` takes a URL, so host the metadata JSON at a public URL and upload it the same way. Without hosting, use [`uploadJson`](#upload-json) below.
+
+## From your app with Turbo
+
+Upload from a Next.js 16 browser app with [`@ardrive/turbo-sdk`](https://docs.ardrive.io/docs/turbo/turbo-sdk/). Uploads are paid with your Turbo credits. Top up at [turbo.ar.io/topup](https://turbo.ar.io/topup).
+
+### Install
+
+```bash
+pnpm add @ardrive/turbo-sdk buffer crypto-browserify stream-browserify process
+```
+
+### Configure Next.js
+
+The SDK needs Node built-ins in the browser:
+
+```js next.config.js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  serverExternalPackages: ["@ardrive/turbo-sdk"],
+  turbopack: {
+    resolveAlias: {
+      buffer: "buffer/",
+      crypto: "crypto-browserify",
+      stream: "stream-browserify",
+      process: "process/browser",
+    },
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        buffer: require.resolve("buffer/"),
+        crypto: require.resolve("crypto-browserify"),
+        stream: require.resolve("stream-browserify"),
+        process: require.resolve("process/browser"),
+      };
+    }
+    return config;
+  },
+};
+
+module.exports = nextConfig;
+```
+
+Set your Arweave wallet key, base64 encoded:
+
+```bash .env.local
+NEXT_PUBLIC_ARWEAVE_KEY=your_base64_encoded_arweave_key
+```
+
+### Create the client
+
+```typescript client.ts
+import { TurboFactory } from "@ardrive/turbo-sdk/web";
+
+const ARWEAVE_KEY = JSON.parse(
+  Buffer.from(process.env.NEXT_PUBLIC_ARWEAVE_KEY as string, "base64").toString()
+);
+
+const turboClient = TurboFactory.authenticated({ privateKey: ARWEAVE_KEY });
+
+export default turboClient;
+```
+
+### Patch fetch
+
+The SDK sends a `ReadableStream` body, which the browser can't resend on retry. This helper turns it into a `Blob`:
+
+```typescript patchFetch.ts
+let baseOriginalFetch: typeof globalThis.fetch | null = null;
+let patchCount = 0;
+
+const patchFetch = (): (() => void) => {
+  if (patchCount === 0) {
+    baseOriginalFetch = globalThis.fetch;
+    globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      if (init?.body instanceof ReadableStream) {
+        const blob = await new Response(init.body).blob();
+        const { duplex: _duplex, ...rest } = init as RequestInit & { duplex?: string };
+        return baseOriginalFetch!(input, { ...rest, body: blob });
+      }
+      return baseOriginalFetch!(input, init);
+    };
+  }
+  patchCount++;
+
+  let restored = false;
+  return () => {
+    if (restored) return;
+    restored = true;
+    patchCount--;
+    if (patchCount === 0) {
+      globalThis.fetch = baseOriginalFetch!;
+      baseOriginalFetch = null;
+    }
+  };
+};
+
+export default patchFetch;
+```
+
+### Upload a file
+
+```typescript uploadToArweave.ts
+import turboClient from "./client";
+import patchFetch from "./patchFetch";
+
+const uploadToArweave = async (
+  file: File,
+  getProgress: (progress: number) => void = () => {}
+): Promise<string> => {
+  const restoreFetch = patchFetch();
+  try {
+    const uint8Array = new Uint8Array(await file.arrayBuffer());
+    const { id } = await turboClient.uploadFile({
+      fileStreamFactory: () => Buffer.from(uint8Array),
+      fileSizeFactory: () => file.size,
+      dataItemOpts: {
+        tags: [
+          { name: "Content-Type", value: file.type },
+          { name: "File-Name", value: file.name },
+        ],
+      },
+      events: {
+        onProgress: ({ totalBytes, processedBytes }) => {
+          getProgress(Math.round((processedBytes / totalBytes) * 100));
+        },
+      },
+    });
+    return `ar://${id}`;
+  } finally {
+    restoreFetch();
+  }
+};
+
+export default uploadToArweave;
+```
+
+```typescript
+const uri = await uploadToArweave(file, (progress) => console.log(`${progress}%`));
+```
+
+### Upload JSON
+
+```typescript uploadJson.ts
+import uploadToArweave from "./uploadToArweave";
+
+export async function uploadJson(json: object): Promise<string> {
+  const file = new File([JSON.stringify(json)], "upload.json", {
+    type: "application/json",
+  });
+  return uploadToArweave(file);
+}
+```
+
+```typescript
+const metadataUri = await uploadJson({
+  name: "My first moment",
+  description: "Work in progress.",
+  image: "ar://FILE_ID",
+  content: { mime: "image/png", uri: "ar://FILE_ID" },
+});
+```
+
+## Next steps
+
+- [Quickstart](/quickstart): use the URIs to create a moment.
+- [Create a collection](/api-reference/collections/create) with a metadata URI.
