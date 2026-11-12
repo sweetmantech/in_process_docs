@@ -1,32 +1,52 @@
 ---
-title: SalesConfig Reference
+title: "SalesConfig"
+description: "Set a moment's price, currency and sale window when you create it."
 ---
 
-The `salesConfig` object defines how the writing moment can be sold or minted. The structure depends on the `type` field:
+Every create request takes a `token.salesConfig`. Use `fixedPrice` to sell for ETH and `erc20Mint` to sell for USDC.
 
-### ERC20 Mint Example
+| Field | Type | Description |
+|---|---|---|
+| `type` | string | `fixedPrice` (ETH) or `erc20Mint` (ERC20) |
+| `pricePerToken` | string | Price in the currency's smallest unit: wei for ETH (18 decimals), 6 decimals for USDC. `"0"` is free. |
+| `saleStart` | string | Unix time in seconds. `"0"` starts now. |
+| `saleEnd` | string | Unix time in seconds. `"18446744073709551615"` never ends. |
+| `currency` | string | ERC20 address. Required for `erc20Mint`, omitted for `fixedPrice`. |
 
-```json
-{
-  "type": "erc20Mint",
-  "pricePerToken": "1000000", // (parsed units, e.g., USDC has 6 decimals)
-  "saleStart": 1717200000, // Unix timestamp (seconds)
-  "saleEnd": 18446744073709551615, // maxUint64 for no end
-  "currency": "0xA0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC address
-}
-```
-
-### Fixed Price Example
+## Free
 
 ```json
 {
   "type": "fixedPrice",
-  "pricePerToken": "100000000000000000", // (parsed units, e.g., ETH has 18 decimals)
-  "saleStart": 1717200000, // Unix timestamp (seconds)
-  "saleEnd": 18446744073709551615 // maxUint64 for no end
-  // Note: No 'currency' field for fixedPrice
+  "pricePerToken": "0",
+  "saleStart": "0",
+  "saleEnd": "18446744073709551615"
 }
 ```
 
-- The `currency` parameter only exists if `type` is `erc20Mint`.
-- For `fixedPrice`, the sale is denominated in the native token (e.g., ETH), and `currency` is omitted.
+## 0.001 ETH
+
+```json
+{
+  "type": "fixedPrice",
+  "pricePerToken": "1000000000000000",
+  "saleStart": "0",
+  "saleEnd": "18446744073709551615"
+}
+```
+
+## 1 USDC
+
+```json
+{
+  "type": "erc20Mint",
+  "pricePerToken": "1000000",
+  "saleStart": "0",
+  "saleEnd": "18446744073709551615",
+  "currency": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+}
+```
+
+`0x8335...2913` is USDC on Base.
+
+To change the sale after creation, use [Set sale](/api-reference/sale).

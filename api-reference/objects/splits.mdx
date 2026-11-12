@@ -1,82 +1,35 @@
 ---
-title: Splits Configuration Reference
+title: "Splits"
+description: "Share a moment's revenue between several addresses."
 ---
 
-The `splits` array defines how revenue from moment sales will be distributed among multiple recipients. This configuration is optional.
+Pass `splits` next to `token` in a create request. Splits are optional.
 
-### Splits Structure
-
-`splits` is an array of objects, where each object contains:
-
-- **`address`**: The recipient's Ethereum address
-- **`percentAllocation`**: The percentage allocation (0-100)
+| Field | Type | Description |
+|---|---|---|
+| `address` | string | Recipient address |
+| `percentAllocation` | number | Share of revenue, 0 to 100 |
 
 ```json
 {
   "splits": [
-    {
-      "address": "0xRecipient1",
-      "percentAllocation": 50
-    },
-    {
-      "address": "0xRecipient2",
-      "percentAllocation": 30
-    },
-    {
-      "address": "0xRecipient3",
-      "percentAllocation": 20
-    }
+    { "address": "0xRecipient1", "percentAllocation": 60 },
+    { "address": "0xRecipient2", "percentAllocation": 40 }
   ]
 }
 ```
 
-### Important Requirements
+## Rules
 
-- Must have at least 2 recipients
-- All `percentAllocation` values must sum to exactly 100%
-- Each recipient address must be a valid Ethereum address
-- The backend API will validate these requirements
+- At least 2 recipients.
+- Percentages add up to exactly 100.
+- Each address must be valid.
 
-### Important Notes
+## What happens
 
-- The splits contract owner will be set to the creator's smart wallet
-- If `splits` is provided, the `payoutRecipient` in the token configuration will be automatically set to the splits contract address
-- If `splits` is not provided, you can optionally specify a `payoutRecipient` directly in the token configuration
+- The API creates a split contract for these recipients, or reuses the one that already exists for the same recipients and percentages.
+- The moment's `payoutRecipient` is set to the split contract. Any `payoutRecipient` you send is ignored.
+- The split contract has no owner, so its recipients can't be changed.
+- Funds collect in the split contract. [Distribute](/api-reference/splits/distribute) sends them to the recipients.
 
-### Example: Two-Way Split
-
-```json
-{
-  "splits": [
-    {
-      "address": "0xRecipient1",
-      "percentAllocation": 60
-    },
-    {
-      "address": "0xRecipient2",
-      "percentAllocation": 40
-    }
-  ]
-}
-```
-
-### Example: Three-Way Split
-
-```json
-{
-  "splits": [
-    {
-      "address": "0xRecipient1",
-      "percentAllocation": 50
-    },
-    {
-      "address": "0xRecipient2",
-      "percentAllocation": 30
-    },
-    {
-      "address": "0xRecipient3",
-      "percentAllocation": 20
-    }
-  ]
-}
-```
+You can also create a split on its own with [Create split](/api-reference/splits/create).
