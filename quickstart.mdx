@@ -39,7 +39,7 @@ curl -X POST https://api.inprocess.world/api/upload \
 { "uri": "ar://FILE_ID" }
 ```
 
-Files under 5 MB are free for 11 uploads a month. See [Upload file with In•Process](/guides/upload-file-in-process) for paid uploads.
+Files under 5 MB are free for 11 uploads a month. See [Upload files](/guides/upload-files#cost) for paid uploads.
 
 ## 3. Upload the metadata
 
@@ -59,7 +59,7 @@ Write a metadata JSON that points to the file:
 
 For audio or video, also set `"animation_url": "ar://FILE_ID"` and use a cover image for `image`.
 
-Host this JSON at a public URL and upload it the same way as step 2, or upload it from your app with [`uploadJson`](/guides/upload-to-arweave#upload-json-metadata). Keep the returned URI.
+Host this JSON at a public URL and upload it the same way as step 2, or upload it from your app with [`uploadJson`](/guides/upload-files#upload-json). Keep the returned URI.
 
 ```bash
 export METADATA_URI=ar://METADATA_ID
