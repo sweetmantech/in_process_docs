@@ -1,0 +1,100 @@
+# In•Process
+
+> In•Process is an onchain timeline for artists on Base. Each post is a moment: an ERC-1155 token in a collection that people can collect. The REST API creates moments, sells and airdrops them, and reads timelines, collections and artist data.
+
+- Base URL: `https://api.inprocess.world/api`
+- Reads and moment creation are public. Endpoints that act for an artist take an API key (`x-api-key`) or a 1-hour access token (`Authorization: Bearer`). See [Authentication](https://docs.inprocess.world/authentication.md).
+- Any page is available as Markdown by adding `.md` to its URL.
+
+## When to use
+
+- Post an artist's work, text, audio or video as a moment on their timeline.
+- Sell a moment for ETH or USDC, airdrop it, or split its revenue.
+- Read an artist's timeline, collections, collectors and stats.
+- Act for an artist from an agent with a 6-digit email code.
+
+## Start here
+
+- [Overview](https://docs.inprocess.world/index.md): What In•Process is, the base URL and auth.
+- [Quickstart](https://docs.inprocess.world/quickstart.md): Upload a file and its metadata, then create a moment.
+- [Authentication](https://docs.inprocess.world/authentication.md): Use an API key or a 1-hour access token, and read auth errors.
+- [Agents](https://docs.inprocess.world/agents.md): Get an access token for an artist from a 6-digit email code.
+- [Moments & collections](https://docs.inprocess.world/concepts/moments-and-collections.md): How moments, collections, metadata, admins and sales relate.
+- [Wallets](https://docs.inprocess.world/concepts/wallets.md): Primary wallet vs smart wallet, and who pays and receives on a collect.
+
+## Create
+
+- [Upload files](https://docs.inprocess.world/guides/upload-files.md): Get an `ar://` URI for a file or metadata JSON, through the API or with Turbo.
+- [Upload a file](https://docs.inprocess.world/api-reference/arweave/upload.md): `POST /upload`. Store a file from a URL on Arweave.
+- [Create a moment](https://docs.inprocess.world/api-reference/moment/create.md): `POST /moment/create`. Create a moment in a collection, or a new collection with its first moment.
+- [Create moments in a batch](https://docs.inprocess.world/api-reference/moment/create-batch.md): `POST /moment/create-batch`. Create several moments in one transaction.
+- [Create a writing moment](https://docs.inprocess.world/api-reference/moment/writing.md): `POST /moment/create/writing`. Create a text moment without uploading anything.
+- [Simulate a moment](https://docs.inprocess.world/api-reference/moment/simulate.md): `POST /moment/create/simulate`. Check a create request without sending a transaction.
+- [Update moment metadata](https://docs.inprocess.world/api-reference/moment/update-uri.md): `PATCH /moment`. Change a moment's metadata URI or move it to another collection.
+- [Create a collection](https://docs.inprocess.world/api-reference/collections/create.md): `POST /collections`. Create an empty collection.
+- [Update collection metadata](https://docs.inprocess.world/api-reference/collections/update-uri.md): `PATCH /collections/{network}/{contract}`. Change a collection's metadata URI.
+- [Get the default collection](https://docs.inprocess.world/api-reference/collections/create-default.md): `GET /collections/default`. The collection the app and Telegram post to.
+- [Set the default collection](https://docs.inprocess.world/api-reference/collections/set-default.md): `PUT /collections/default`. Change or reset it.
+- [Add an admin](https://docs.inprocess.world/api-reference/moment/add-permission.md): `POST /moment/permission`. Let another address manage a collection or moment.
+- [Remove an admin](https://docs.inprocess.world/api-reference/moment/remove-permission.md): `DELETE /moment/permission`.
+- [Create a comment](https://docs.inprocess.world/api-reference/comments/create.md): `POST /comments/{network}/{contract}`. Comment on or reply to a moment.
+- [SalesConfig](https://docs.inprocess.world/api-reference/objects/sales-config.md): The `salesConfig` object: price, currency and sale window.
+- [Splits](https://docs.inprocess.world/api-reference/objects/splits.md): The `splits` array: share revenue between addresses.
+
+## Sell & collect
+
+- [Collect a moment](https://docs.inprocess.world/api-reference/moment/collect.md): `POST /moment/collect`. Buy copies with the collector's smart wallet.
+- [Set a sale](https://docs.inprocess.world/api-reference/sale.md): `POST /sale`. Change a moment's price, sale window or recipient.
+- [Airdrop a moment](https://docs.inprocess.world/api-reference/moment/airdrop.md): `POST /moment/airdrop`. Send copies to wallet addresses or emails.
+- [Create a split](https://docs.inprocess.world/api-reference/splits/create.md): `POST /splits`. Create a split contract on its own.
+- [Distribute a split](https://docs.inprocess.world/api-reference/splits/distribute.md): `GET /splits`. Send a split's funds to its recipients.
+
+## Read data
+
+- [Get a moment](https://docs.inprocess.world/api-reference/moment/get.md): `GET /moment`. A moment's metadata, sale and admins.
+- [Get the timeline](https://docs.inprocess.world/api-reference/timeline/index.md): `GET /timeline`. Moments from all artists, one artist or one collection.
+- [List collections](https://docs.inprocess.world/api-reference/collections/browse.md): `GET /collections`. All collections, or one artist's.
+- [Get a collection](https://docs.inprocess.world/api-reference/collections/info.md): `GET /collections/{network}/{contract}`.
+- [List comments](https://docs.inprocess.world/api-reference/comments/get.md): `GET /comments`. Comments on a moment.
+- [List collectors](https://docs.inprocess.world/api-reference/collectors/index.md): `GET /collectors`. Collectors ranked by copies and spend.
+- [List transfers](https://docs.inprocess.world/api-reference/transfers/index.md): `GET /transfers`. Collects, payments and airdrops.
+- [Search artists](https://docs.inprocess.world/api-reference/artists/search.md): `GET /artists/search`. Find artists by username prefix or exact handle.
+- [List active artists](https://docs.inprocess.world/api-reference/artists/active.md): `GET /artists/active`.
+- [List artists who also collect](https://docs.inprocess.world/api-reference/artists/collectors.md): `GET /artists/collectors`.
+- [Get timeline stats](https://docs.inprocess.world/api-reference/artists/stats-timeline.md): `GET /stats/timeline`. One artist's moment count and ETH/USDC received as fee recipient.
+- [Get collecting stats](https://docs.inprocess.world/api-reference/artists/stats-collecting.md): `GET /stats/collecting`. One artist's spend on collects.
+- [Get platform stats](https://docs.inprocess.world/api-reference/artists/stats-analytics.md): `GET /stats/analytics`. Platform-wide counts.
+- [List uploads](https://docs.inprocess.world/api-reference/arweave/get-uploads.md): `GET /uploads`. Arweave upload usage and cost.
+- [Get metadata](https://docs.inprocess.world/api-reference/arweave/metadata.md): `GET /metadata`. Fetch JSON from an `ar://` or `ipfs://` URI.
+- [Get an image](https://docs.inprocess.world/api-reference/media/image.md): `GET /media/image`. Proxy an image.
+- [Stream media](https://docs.inprocess.world/api-reference/media/stream.md): `GET /media/stream`. Stream audio or video.
+
+## Account
+
+- [Send a sign-in code](https://docs.inprocess.world/api-reference/oauth/send-code.md): `POST /oauth/code`. Email a 6-digit code to the artist.
+- [Sign in with a code](https://docs.inprocess.world/api-reference/oauth/login.md): `POST /oauth/login`. Exchange the code for an access token.
+- [Get the signed-in artist](https://docs.inprocess.world/api-reference/oauth/get.md): `GET /oauth`. Check a credential and get the artist's address.
+- [Create an API key](https://docs.inprocess.world/api-reference/artists/api-keys/create.md): `POST /artists/api-keys`.
+- [Get the smart wallet](https://docs.inprocess.world/api-reference/smartwallet/get.md): `GET /smartwallet`. The address to fund for collects and paid uploads.
+- [Get smart wallet balances](https://docs.inprocess.world/api-reference/smartwallet/balances.md): `GET /smartwallet/balances`.
+- [Withdraw from the smart wallet](https://docs.inprocess.world/api-reference/smartwallet/withdraw.md): `POST /smartwallet/withdraw`.
+- [List wallets](https://docs.inprocess.world/api-reference/wallets/get.md): `GET /artists/wallets`.
+- [Connect a wallet](https://docs.inprocess.world/api-reference/wallets/connect.md): `POST /artists/wallets`.
+- [Disconnect a wallet](https://docs.inprocess.world/api-reference/wallets/disconnect.md): `DELETE /artists/wallets`.
+- [Connect a phone number](https://docs.inprocess.world/api-reference/artists/phones/connect.md): `POST /phones`. Post moments by SMS.
+- [Disconnect a phone number](https://docs.inprocess.world/api-reference/artists/phones/disconnect.md): `DELETE /phones`.
+- [List notifications](https://docs.inprocess.world/api-reference/notifications/index.md): `GET /notifications`.
+- [List emails](https://docs.inprocess.world/api-reference/emails/get.md): `GET /emails`. The artist's email addresses.
+- [Sign in with In•Process](https://docs.inprocess.world/guides/sign-in-with-in-process.md): Add In•Process sign-in to your app.
+
+## Protocol
+
+- [Deployments](https://docs.inprocess.world/protocol/deployments.md): Contract addresses.
+- [Setup actions](https://docs.inprocess.world/protocol/setup-actions.md): Configure collections and tokens so they show correctly on marketplaces.
+- [Create a collection with the Coinbase SDK](https://docs.inprocess.world/guides/create-collection-coinbase-sdk.md): Create a collection onchain from your own smart account.
+- [Get a Nouns proposal action](https://docs.inprocess.world/api-reference/nouns/get-nouns-proposal-action.md): `POST /nouns`. Build a Nouns proposal that mints a moment.
+
+## Machine-readable
+
+- [OpenAPI spec](https://docs.inprocess.world/api-reference/openapi.json): Every endpoint, request and response.
+- [Full docs](https://docs.inprocess.world/llms-full.txt): All pages in one file.
