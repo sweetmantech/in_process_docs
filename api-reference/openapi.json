@@ -5551,11 +5551,11 @@
         "properties": {
           "address": {
             "type": "string",
-            "description": "Recipient address for revenue sharing"
+            "description": "Recipient address"
           },
           "percentAllocation": {
             "type": "number",
-            "description": "Allocation percentage (0-100)",
+            "description": "Share of revenue, 0 to 100. All recipients add up to 100.",
             "minimum": 0,
             "maximum": 100
           }
@@ -5886,7 +5886,7 @@
               "fixedPrice",
               "erc20Mint"
             ],
-            "description": "The sale type"
+            "description": "fixedPrice sells for ETH. erc20Mint sells for the ERC20 in currency."
           },
           "pricePerToken": {
             "oneOf": [
@@ -5900,7 +5900,7 @@
                 "type": "number"
               }
             ],
-            "description": "Price per token in wei (18 decimals), as a decimal integer string or JSON number. For example, \"100000000000000000\" or 100000000000000000 represents 0.1 ETH"
+            "description": "Price in the currency's smallest unit: wei for ETH (18 decimals), 6 decimals for USDC. \"0\" is free."
           },
           "saleStart": {
             "oneOf": [
@@ -5914,7 +5914,7 @@
                 "type": "number"
               }
             ],
-            "description": "Sale start time: Unix timestamp as a decimal integer string or JSON number"
+            "description": "Unix time in seconds. \"0\" starts now."
           },
           "saleEnd": {
             "oneOf": [
@@ -5928,11 +5928,11 @@
                 "type": "number"
               }
             ],
-            "description": "Sale end time: Unix timestamp as a decimal integer string or JSON number"
+            "description": "Unix time in seconds. \"18446744073709551615\" never ends."
           },
           "currency": {
             "type": "string",
-            "description": "Optional ERC20 token address. If not provided, defaults to the native token (ETH)"
+            "description": "ERC20 address. Required for erc20Mint, omitted for fixedPrice. USDC on Base: 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
           }
         }
       },
@@ -6902,7 +6902,7 @@
                 },
                 "percent_allocation": {
                   "type": "number",
-                  "description": "Allocation percentage (0-100)"
+                  "description": "Share of revenue, 0 to 100. All recipients add up to 100."
                 }
               }
             }
