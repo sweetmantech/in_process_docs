@@ -59,46 +59,42 @@
             ]
           },
           {
-            "group": "Objects",
-            "pages": [
-              "api-reference/objects/sales-config",
-              "api-reference/objects/splits"
-            ]
-          },
-          {
             "group": "Moments",
             "pages": [
-              "api-reference/moment/get",
               "api-reference/moment/create",
               "api-reference/moment/create-batch",
               "api-reference/moment/writing",
-              "api-reference/moment/update-uri",
-              {
-                "group": "Simulate",
-                "pages": [
-                  "api-reference/moment/simulate"
-                ]
-              }
+              "api-reference/moment/simulate",
+              "api-reference/moment/get",
+              "api-reference/moment/update-uri"
             ]
           },
           {
-            "group": "Collecting",
+            "group": "Timeline & artists",
             "pages": [
-              "api-reference/moment/collect",
-              "api-reference/collectors/index"
+              "api-reference/timeline/index",
+              "api-reference/artists/search",
+              "api-reference/artists/active",
+              "api-reference/artists/collectors"
             ]
           },
           {
-            "group": "Sales",
+            "group": "Uploads",
             "pages": [
-              "api-reference/sale"
+              "api-reference/arweave/upload",
+              "api-reference/arweave/get-uploads",
+              "api-reference/arweave/metadata"
             ]
           },
           {
-            "group": "Comments",
+            "group": "Collections",
             "pages": [
-              "api-reference/comments/create",
-              "api-reference/comments/get"
+              "api-reference/collections/browse",
+              "api-reference/collections/info",
+              "api-reference/collections/create",
+              "api-reference/collections/update-uri",
+              "api-reference/collections/create-default",
+              "api-reference/collections/set-default"
             ]
           },
           {
@@ -109,52 +105,18 @@
             ]
           },
           {
-            "group": "Collections",
+            "group": "Collecting",
             "pages": [
-              "api-reference/collections/browse",
-              "api-reference/collections/info",
-              "api-reference/collections/create",
-              "api-reference/collections/create-default",
-              "api-reference/collections/set-default",
-              "api-reference/collections/update-uri"
-            ]
-          },
-          {
-            "group": "Timeline",
-            "pages": [
-              "api-reference/timeline/index"
-            ]
-          },
-          {
-            "group": "Transfers",
-            "pages": [
-              "api-reference/transfers/index"
-            ]
-          },
-          {
-            "group": "Notifications",
-            "pages": [
-              "api-reference/notifications/index"
+              "api-reference/moment/collect",
+              "api-reference/sale",
+              "api-reference/collectors/index"
             ]
           },
           {
             "group": "Airdrops",
             "pages": [
-              "api-reference/moment/airdrop"
-            ]
-          },
-          {
-            "group": "Emails",
-            "pages": [
-              "api-reference/emails/get"
-            ]
-          },
-          {
-            "group": "Smart Wallet",
-            "pages": [
-              "api-reference/smartwallet/get",
-              "api-reference/smartwallet/balances",
-              "api-reference/smartwallet/withdraw"
+              "api-reference/moment/airdrop",
+              "api-reference/transfers/index"
             ]
           },
           {
@@ -165,17 +127,35 @@
             ]
           },
           {
-            "group": "Artists",
+            "group": "Comments",
             "pages": [
-              "api-reference/artists/api-keys/create",
-              "api-reference/artists/phones/connect",
-              "api-reference/artists/phones/disconnect",
-              "api-reference/artists/active",
-              "api-reference/artists/search",
-              "api-reference/artists/collectors",
-              "api-reference/artists/stats-collecting",
+              "api-reference/comments/get",
+              "api-reference/comments/create"
+            ]
+          },
+          {
+            "group": "Stats",
+            "pages": [
               "api-reference/artists/stats-timeline",
+              "api-reference/artists/stats-collecting",
               "api-reference/artists/stats-analytics"
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              "api-reference/oauth/send-code",
+              "api-reference/oauth/login",
+              "api-reference/oauth/get",
+              "api-reference/artists/api-keys/create"
+            ]
+          },
+          {
+            "group": "Smart wallet",
+            "pages": [
+              "api-reference/smartwallet/get",
+              "api-reference/smartwallet/balances",
+              "api-reference/smartwallet/withdraw"
             ]
           },
           {
@@ -187,32 +167,32 @@
             ]
           },
           {
-            "group": "OAuth",
+            "group": "Phone & notifications",
             "pages": [
-              "api-reference/oauth/send-code",
-              "api-reference/oauth/login",
-              "api-reference/oauth/get"
+              "api-reference/artists/phones/connect",
+              "api-reference/artists/phones/disconnect",
+              "api-reference/notifications/index",
+              "api-reference/emails/get"
             ]
           },
           {
             "group": "Media",
             "pages": [
               "api-reference/media/image",
-              "api-reference/media/stream",
-              "api-reference/arweave/metadata"
+              "api-reference/media/stream"
             ]
           },
           {
-            "group": "Arweave",
-            "pages": [
-              "api-reference/arweave/upload",
-              "api-reference/arweave/get-uploads"
-            ]
-          },
-          {
-            "group": "Nouns",
+            "group": "Integrations",
             "pages": [
               "api-reference/nouns/get-nouns-proposal-action"
+            ]
+          },
+          {
+            "group": "Objects",
+            "pages": [
+              "api-reference/objects/sales-config",
+              "api-reference/objects/splits"
             ]
           }
         ]
