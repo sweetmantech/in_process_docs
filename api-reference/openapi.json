@@ -402,6 +402,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -859,7 +862,8 @@
         },
         "tags": [
           "collectors"
-        ]
+        ],
+        "security": []
       }
     },
     "/moment/airdrop": {
@@ -870,6 +874,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -924,6 +931,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -976,6 +986,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -1160,10 +1173,10 @@
         "operationId": "createComment",
         "security": [
           {
-            "bearerAuth": []
+            "apiKeyAuth": []
           },
           {
-            "apiKeyAuth": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -1260,11 +1273,14 @@
     "/sale": {
       "post": {
         "summary": "Set Moment Sale",
-        "description": "Update the sale configuration for a Moment on the In\u2022Process protocol. This endpoint allows artists to update the price, sale window, token limit per address, and funds recipient for a Moment's sale.\n\n**Note:** At least one sale field must be provided. Requires authentication via API key.",
+        "description": "Update the sale configuration for a Moment on the In\u2022Process protocol. This endpoint allows artists to update the price, sale window, token limit per address, and funds recipient for a Moment's sale.\n\n**Note:** At least one sale field must be provided.",
         "operationId": "setMomentSale",
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -1383,17 +1399,21 @@
                   "status": "success",
                   "collections": [
                     {
+                      "id": "11111111-1111-1111-1111-111111111111",
                       "address": "0x06a701Ae65582B92Af48cDff45a8B20DcA3714cA",
-                      "chainId": 8453,
                       "name": "My Collection",
-                      "uri": "ar://1wMmKuaz-VdxmruOQJuYS-3nfU3zlNKmPNpc79Ou-qM",
-                      "creator": {
-                        "address": "0x4b4324bcC6dB9380ABBbbD20B24A16C11FB5B38A",
-                        "username": "artist name 1"
-                      },
+                      "chain_id": 8453,
                       "created_at": "2025-06-07T20:41:35+00:00",
-                      "updated_at": "2025-08-12T12:28:41+00:00",
-                      "protocol": "in_process"
+                      "uri": "ar://1wMmKuaz-VdxmruOQJuYS-3nfU3zlNKmPNpc79Ou-qM",
+                      "protocol": "in_process",
+                      "creator": "0x4b4324bcC6dB9380ABBbbD20B24A16C11FB5B38A",
+                      "creator_username": "artist name 1",
+                      "admins": [
+                        {
+                          "artist_address": "0x4b4324bcC6dB9380ABBbbD20B24A16C11FB5B38A",
+                          "token_id": 0
+                        }
+                      ]
                     }
                   ],
                   "pagination": {
@@ -1479,14 +1499,14 @@
     "/collections/default": {
       "get": {
         "summary": "Get Default Collection",
-        "description": "Get the default collection for the authenticated artist. Returns the shared **Process** collection when no default is set.",
+        "description": "Get the default collection for the authenticated artist. Until one is set, this is the artist's own **Process** collection, created the first time it is needed.",
         "operationId": "createDefaultCollection",
         "security": [
           {
-            "bearerAuth": []
+            "apiKeyAuth": []
           },
           {
-            "apiKeyAuth": []
+            "bearerAuth": []
           }
         ],
         "responses": {
@@ -1536,14 +1556,14 @@
       },
       "put": {
         "summary": "Set Default Collection",
-        "description": "Set the default collection for the authenticated artist. Send `null` to reset it to the shared **Process** collection.\n\n**Note:** Only Collection admins can set a Collection as the default.",
+        "description": "Set the default collection for the authenticated artist. Send `null` to reset it to the artist's own **Process** collection.\n\n**Note:** Only Collection admins can set a Collection as the default.",
         "operationId": "setDefaultCollection",
         "security": [
           {
-            "bearerAuth": []
+            "apiKeyAuth": []
           },
           {
-            "apiKeyAuth": []
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -1723,6 +1743,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -1779,7 +1802,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized \u2014 missing or invalid API key",
+            "description": "Unauthorized \u2014 missing or invalid authentication",
             "content": {
               "application/json": {
                 "schema": {
@@ -2479,11 +2502,14 @@
       },
       "post": {
         "summary": "Create Split",
-        "description": "Create a split contract for revenue sharing. Requires authentication via API key.",
+        "description": "Create a split contract for revenue sharing.",
         "operationId": "createSplit",
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -2825,9 +2851,12 @@
     "/artists/api-keys": {
       "post": {
         "summary": "Create an Artist API Key",
-        "description": "Create a new API key for artists on the In\u2022Process protocol.\n\n**Overview:**\n\nArtists can create API keys in two ways:\n\n1. **Programmatically** - Using the API endpoint documented below\n2. **Via Web Interface** - Using the [In\u2022Process API Keys Management Site](https://inprocess.world/manage/api-keys)\n\nThe web interface provides a user-friendly way to create, view, and manage an artist API keys without writing code.\n\n**Note:** This endpoint requires a Privy access token for authentication. Privy access tokens are obtained through the Privy authentication flow and provide secure access to artist-specific API endpoints. For more information about Privy authentication, see the [Privy documentation](https://docs.privy.io/authentication/user-authentication/access-tokens#getting-the-access-token).",
+        "description": "Create a new API key for artists on the In\u2022Process protocol.\n\n**Overview:**\n\nArtists can create API keys in two ways:\n\n1. **Programmatically** - Using the API endpoint documented below\n2. **Via Web Interface** - Using the [In\u2022Process API Keys Management Site](https://inprocess.world/manage/api-keys)\n\nThe web interface provides a user-friendly way to create, view, and manage an artist API keys without writing code.\n\n**Note:** Send an API key or access token. See [Authentication](/authentication).",
         "operationId": "createArtistApiKey",
         "security": [
+          {
+            "apiKeyAuth": []
+          },
           {
             "bearerAuth": []
           }
@@ -3397,10 +3426,10 @@
         "operationId": "connectWallet",
         "security": [
           {
-            "bearerAuth": []
+            "apiKeyAuth": []
           },
           {
-            "apiKeyAuth": []
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -3471,10 +3500,10 @@
         "operationId": "disconnectWallet",
         "security": [
           {
-            "bearerAuth": []
+            "apiKeyAuth": []
           },
           {
-            "apiKeyAuth": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -3595,7 +3624,8 @@
               }
             }
           }
-        }
+        },
+        "security": []
       }
     },
     "/emails": {
@@ -3606,6 +3636,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -3822,6 +3855,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -3994,6 +4030,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -4056,6 +4095,9 @@
         "security": [
           {
             "apiKeyAuth": []
+          },
+          {
+            "bearerAuth": []
           }
         ],
         "responses": {
@@ -4548,10 +4590,10 @@
         "operationId": "getAuthenticatedAccount",
         "security": [
           {
-            "bearerAuth": []
+            "apiKeyAuth": []
           },
           {
-            "apiKeyAuth": []
+            "bearerAuth": []
           }
         ],
         "responses": {
@@ -5078,10 +5120,10 @@
         "operationId": "uploadFile",
         "security": [
           {
-            "bearerAuth": []
+            "apiKeyAuth": []
           },
           {
-            "apiKeyAuth": []
+            "bearerAuth": []
           }
         ],
         "requestBody": {
@@ -5463,64 +5505,11 @@
             "type": "array",
             "description": "List of collection records",
             "items": {
-              "$ref": "#/components/schemas/Collection"
+              "$ref": "#/components/schemas/RpcCollection"
             }
           },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
-          }
-        }
-      },
-      "Collection": {
-        "type": "object",
-        "required": [
-          "address",
-          "chainId",
-          "name",
-          "uri",
-          "creator",
-          "created_at",
-          "updated_at",
-          "protocol"
-        ],
-        "properties": {
-          "address": {
-            "type": "string",
-            "description": "Contract address of the collection"
-          },
-          "chainId": {
-            "type": "integer",
-            "description": "Chain ID where the collection exists"
-          },
-          "name": {
-            "type": "string",
-            "description": "Collection name"
-          },
-          "uri": {
-            "type": "string",
-            "description": "Metadata URI"
-          },
-          "creator": {
-            "$ref": "#/components/schemas/CollectionDefaultAdmin"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "ISO timestamp when the collection was created"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time",
-            "description": "ISO timestamp when the collection was updated"
-          },
-          "protocol": {
-            "type": "string",
-            "description": "Protocol the collection belongs to",
-            "enum": [
-              "in_process",
-              "catalog",
-              "sound.xyz"
-            ]
           }
         }
       },
@@ -5709,7 +5698,8 @@
                   "type": "string"
                 },
                 "token_id": {
-                  "type": "number"
+                  "type": "number",
+                  "description": "0 means admin of the whole collection; otherwise admin of that moment only"
                 }
               }
             }
