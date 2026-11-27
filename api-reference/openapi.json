@@ -869,7 +869,7 @@
     "/moment/airdrop": {
       "post": {
         "summary": "Airdrop a Moment",
-        "description": "Airdrop a Moment on the In\u2022Process protocol. This endpoint allows artists to distribute moments to multiple recipients.\n\nEach recipient may be a wallet address (`0x` + 40 hex) or an email address.",
+        "description": "Airdrop a Moment on the In\u2022Process protocol. This endpoint allows artists to distribute moments to multiple recipients.\n\nEach recipient may be a wallet address (`0x` + 40 hex) or an email address.\n\n**Email recipients:** an email is resolved to that inbox's Privy embedded wallet (creating the user and wallet if needed), then the moment is airdropped onchain to that wallet. Passing an email does **not** by itself send a notification email in the request path.\n\n**Recipient notifications (after indexing):**\n- **Email:** if the recipient artist has a linked email (any provider, not Gmail-only), In\u2022Process sends one Resend notification that they received an airdrop (subject: `In Process notification: you received an airdrop`), with the sender, moment name, and collect link. Self-airdrops are skipped. Address-only recipients with no linked email get no email.\n- **Telegram:** independent of email — recipients who linked Telegram and enabled airdrop notify may also get a Telegram message.\n- Email and Telegram can both fire for the same airdrop when both are available.",
         "operationId": "airdropMoment",
         "security": [
           {
@@ -6363,7 +6363,7 @@
           {
             "type": "string",
             "format": "email",
-            "description": "Email address of the recipient",
+            "description": "Email address of the recipient. Resolved to a Privy embedded wallet for the airdrop. Not a synchronous email send.",
             "example": "collector@example.com"
           }
         ]
@@ -6378,7 +6378,7 @@
           "recipients": {
             "type": "array",
             "minItems": 1,
-            "description": "Recipients to receive the airdrop. Each entry may be a wallet address or an email address.",
+            "description": "Recipients to receive the airdrop. Each entry may be a wallet address or an email address. Email entries resolve to a Privy wallet for onchain delivery; notification email (if any) is sent later when the transfer is indexed and the recipient has a linked email.",
             "items": {
               "$ref": "#/components/schemas/AirdropRecipientInput"
             }

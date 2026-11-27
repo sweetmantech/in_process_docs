@@ -2,3 +2,7 @@
 title: "Airdrop a moment"
 openapi: POST /moment/airdrop
 ---
+
+Passing an **email** recipient resolves that inbox to a Privy wallet and airdrops onchain. It is not a request-path email send.
+
+After the transfer is indexed, recipients with a **linked email** get a Resend notification (`In Process notification: you received an airdrop`). Telegram airdrop notify stays separate. Self-airdrops skip email. Provider (Gmail or otherwise) does not matter.
